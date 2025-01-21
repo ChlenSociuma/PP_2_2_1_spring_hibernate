@@ -7,12 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService {
 
+   private final UserDao userDao;
+
    @Autowired
-   private UserDao userDao;
+   public UserServiceImp(UserDao userDao) {
+      this.userDao = userDao;
+   }
 
    @Transactional
    @Override
@@ -20,9 +25,10 @@ public class UserServiceImp implements UserService {
       userDao.add(user);
    }
 
+   @Transactional(readOnly = true)
    @Override
-   public User findUserByCar(String model, int series) {
-      return userDao.findUserByCar(model, series);
+   public Optional<User> findUserByCar(String model, int series) {
+      return Optional.ofNullable(userDao.findUserByCar(model, series));
    }
 
    @Transactional(readOnly = true)
