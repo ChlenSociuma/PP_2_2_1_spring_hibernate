@@ -29,18 +29,13 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public User findUserByCar(String model, int series) {
-      try(Session session = sessionFactory.openSession()) {
          String hql = "SELECT u FROM User u JOIN u.car c WHERE c.model = :model AND c.series = :series";
+         Session session = sessionFactory.getCurrentSession();
          Query<User> query = session.createQuery(hql, User.class);
          query.setParameter("model", model);
          query.setParameter("series", series);
 
          return query.uniqueResult();
-      } catch (Exception e) {
-         e.printStackTrace();
-         System.out.println("Ошибка при поиске юзера по авто.");
-         return null;
-      }
    }
 
    @Override
